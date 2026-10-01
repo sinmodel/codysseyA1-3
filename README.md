@@ -7,13 +7,18 @@
 여행 날짜와 여행 스타일을 입력하면 Gemini API가 국내 여행지를 2~3곳 추천해 주는 바닐라 HTML/CSS/JavaScript 웹서비스입니다.
 
 브라우저의 JavaScript가 `/api/recommend`로 요청을 보내고, Vercel Python Serverless Function이 Gemini API를 호출한 뒤 JSON 결과를 반환합니다. 결과는 JavaScript가 여행지 카드와 하루 여행 예시로 화면에 표시합니다.
+
 ## 제출물
+
 ### 제1 메뉴 화면 캡쳐 :
 ![AI국내여행](여행날짜_스크린샷.png)
+
 ### 제2 메뉴 화면 캡쳐 :
 ![AI국내여행](여행지_스크린샷.png)
+
 ### 제3 메뉴 화면 캡쳐 :
 ![AI국내여행](다음주말_스크린샷.png)
+
 ## 기술 스택
 
 - Frontend: HTML5, CSS3, Vanilla JavaScript
@@ -106,4 +111,16 @@ python -m http.server 8000
 
 Vercel의 Python Runtime은 프로젝트 루트의 `api/` 디렉터리 아래 Python 함수를 Vercel Function으로 배포할 수 있으며, `requirements.txt`로 의존성을 정의할 수 있습니다.
 
+## 제출 전 체크리스트
 
+- [ ] Vercel URL 접속 가능
+- [ ] 최소 3개 섹션 메뉴 이동 확인
+- [ ] 데스크톱 화면 확인
+- [ ] 모바일 화면 확인
+- [ ] AI 입력 → 결과 출력 확인
+- [ ] 빈 입력 안내 확인
+- [ ] API 오류 안내 확인
+- [ ] README에 배포 URL 기록
+- [ ] 서비스 기획서 포함
+- [ ] 데스크톱/모바일/AI 동작 스크린샷 준비
+- [ ] AI 코딩 도구 사용 과정 증빙 준비
