@@ -10,7 +10,7 @@
 ## 제출물
 ![AI국내여행](여행날짜_스크린샷.png)
 ![AI국내여행](여행지_스크린샷.png)
-![AI국내여행](여행지_스크린샷.png)
+![AI국내여행](다음주말_스크린샷.png)
 ## 기술 스택
 
 - Frontend: HTML5, CSS3, Vanilla JavaScript
