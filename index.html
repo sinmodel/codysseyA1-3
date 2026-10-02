@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="여행 날짜와 스타일을 입력하면 AI가 국내 여행지를 추천해 주는 웹서비스">
+  <title>AI 국내 여행 플래너</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="nav-wrap">
+      <a class="brand" href="#home" aria-label="AI 국내 여행 플래너 홈">TRAVEL AI</a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">메뉴</button>
+      <nav id="site-nav" class="site-nav" aria-label="주요 메뉴">
+        <a href="#home">홈</a>
+        <a href="#recommend">AI 여행 추천</a>
+        <a href="#guide">여행 정보</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section id="home" class="section hero">
+      <div class="hero-inner">
+        <p class="eyebrow">AI DOMESTIC TRAVEL PLANNER</p>
+        <h1>이번 여행,<br><span>AI와 함께 골라볼까?</span></h1>
+        <p class="hero-copy">여행 날짜와 스타일만 입력하면<br>가볍게 시작할 수 있는 국내 여행 아이디어를 받아보세요.</p>
+        <a class="button primary" href="#recommend">AI 추천 시작</a>
+      </div>
+      <div class="hero-card" aria-label="서비스 핵심 안내">
+        <div class="hero-dot"></div>
+        <strong>입력 → AI 분석 → 추천</strong>
+        <p>브라우저에서 바로 체험하는 간단한 여행 추천 흐름</p>
+      </div>
+    </section>
+
+    <section id="recommend" class="section section-soft">
+      <div class="section-heading">
+        <p class="eyebrow">01 / AI RECOMMEND</p>
+        <h2>나에게 맞는 여행지 추천</h2>
+        <p>원하는 날짜와 여행 스타일을 입력하면 AI가 국내 여행지를 추천합니다.</p>
+      </div>
+
+      <div class="recommend-layout">
+        <form id="recommend-form" class="panel form-panel">
+          <label for="travel-date">여행 날짜</label>
+          <input id="travel-date" name="date" type="date" required>
+
+          <label for="travel-style">여행 스타일</label>
+          <textarea id="travel-style" name="style" rows="5" maxlength="300" placeholder="예: 자연 풍경과 맛집을 여유롭게 즐기고 싶어요." required></textarea>
+
+          <button id="submit-button" class="button primary wide" type="submit">AI 여행지 추천받기</button>
+          <p id="form-message" class="form-message" role="status" aria-live="polite"></p>
+        </form>
+
+        <div class="panel result-panel">
+          <div class="result-topline">
+            <div>
+              <p class="eyebrow">AI RESULT</p>
+              <h3 id="result-title">추천 결과가 여기에 표시됩니다.</h3>
+            </div>
+            <span id="result-badge" class="badge">대기 중</span>
+          </div>
+          <div id="result-content" class="result-content empty-state">
+            <p>왼쪽 입력창에 여행 정보를 넣고 추천을 요청해 보세요.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="guide" class="section">
+      <div class="section-heading">
+        <p class="eyebrow">02 / TRAVEL GUIDE</p>
+        <h2>추천을 받은 뒤, 이렇게 여행해요</h2>
+        <p>AI 추천 결과를 바탕으로 하루를 가볍게 구성할 수 있도록 기본 가이드를 제공합니다.</p>
+      </div>
+
+      <div class="guide-grid">
+        <article class="guide-card">
+          <span>AM</span>
+          <h3>오전</h3>
+          <p>대표 명소와 자연 풍경을 중심으로 천천히 둘러봅니다.</p>
+        </article>
+        <article class="guide-card featured">
+          <span>PM</span>
+          <h3>오후</h3>
+          <p>지역 맛집과 가까운 관광지를 묶어서 동선을 단순하게 만듭니다.</p>
+        </article>
+        <article class="guide-card">
+          <span>EV</span>
+          <h3>저녁</h3>
+          <p>숙소와 가까운 곳에서 하루를 정리하며 여유로운 시간을 보냅니다.</p>
+        </article>
+      </div>
+
+      <div class="tips-panel">
+        <div>
+          <p class="eyebrow">TRAVEL TIP</p>
+          <h3>AI 추천은 출발점이에요.</h3>
+        </div>
+        <p>날씨, 운영시간, 실제 위치는 출발 전에 다시 확인하면 더 안전하고 편리하게 여행할 수 있습니다.</p>
+      </div>
+    </section>
+
+    <section class="section section-cta">
+      <div class="cta-card">
+        <div>
+          <p class="eyebrow">03 / START NOW</p>
+          <h2>다음 주말, 어디로 갈까?</h2>
+          <p>여행 계획의 첫 단계를 AI와 함께 가볍게 시작해 보세요.</p>
+        </div>
+        <a class="button secondary" href="#recommend">다시 추천받기</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>AI 국내 여행 플래너 · Codyssey 과제용 학습 프로젝트</p>
+    <p>API Key는 서버 환경 변수로만 관리합니다.</p>
+  </footer>
+
+  <script src="js/app.js" defer></script>
+</body>
+</html>
