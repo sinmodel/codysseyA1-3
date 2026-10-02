@@ -8,9 +8,9 @@
 
 브라우저의 JavaScript가 `/api/recommend`로 요청을 보내고, Vercel Python Serverless Function이 Gemini API를 호출한 뒤 JSON 결과를 반환합니다. 결과는 JavaScript가 여행지 카드와 하루 여행 예시로 화면에 표시합니다.
 ## 제출물
-
-
-
+![AI국내여행](여행날짜_스크린샷.png)
+![AI국내여행](여행날짜_스크린샷.png)
+![AI국내여행](여행날짜_스크린샷.png)
 ## 기술 스택
 
 - Frontend: HTML5, CSS3, Vanilla JavaScript
