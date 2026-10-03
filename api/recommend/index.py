@@ -215,6 +215,12 @@ class handler(BaseHTTPRequestHandler):
         self.send_header("Access-Control-Allow-Methods", "POST, OPTIONS")
         self.end_headers()
 
+    def do_GET(self):
+        if self.path.rstrip("/") == "/api/recommend":
+            send_json(self, 405, {"error": "이 엔드포인트는 POST만 지원합니다."})
+            return
+        send_json(self, 404, {"error": "요청 경로를 찾을 수 없습니다."})
+
     def do_POST(self):
         if self.path.rstrip("/") != "/api/recommend":
             send_json(self, 404, {"error": "요청 경로를 찾을 수 없습니다."})

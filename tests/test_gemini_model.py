@@ -1,4 +1,6 @@
 import importlib.util
+import io
+import json
 import unittest
 from pathlib import Path
 
@@ -19,6 +21,33 @@ class GeminiModelFallbackTests(unittest.TestCase):
         error = Exception("429 Quota exceeded")
         next_model = module.select_next_model("gemini-3.5-flash-lite", error)
         self.assertEqual(next_model, "gemini-3.5-flash")
+
+    def test_get_request_to_api_route_returns_method_error(self):
+        request = module.handler.__new__(module.handler)
+        request.path = "/api/recommend"
+        request.wfile = io.BytesIO()
+
+        status = {}
+        headers = {}
+
+        def send_response(code):
+            status["code"] = code
+
+        def send_header(key, value):
+            headers.setdefault(key, []).append(value)
+
+        def end_headers():
+            pass
+
+        request.send_response = send_response
+        request.send_header = send_header
+        request.end_headers = end_headers
+
+        request.do_GET()
+
+        self.assertEqual(status["code"], 405)
+        payload = json.loads(request.wfile.getvalue().decode("utf-8"))
+        self.assertEqual(payload["error"], "이 엔드포인트는 POST만 지원합니다.")
 
 
 if __name__ == "__main__":
