@@ -33,7 +33,10 @@
 ## 배포 URL
 
 ```text
-Vercel: 배포 후 발급된 URL을 여기에 기록
+Vercel 배포는 로컬에서 준비 완료 상태이며, 실제 배포는 Vercel 로그인 후 아래 명령으로 진행합니다.
+
+npx vercel login
+npx vercel --prod
 ```
 
 ## 화면 구성
@@ -76,14 +79,14 @@ JavaScript가 화면에 출력
 
 API Key는 코드에 직접 작성하지 않습니다.
 
-로컬에서는 `.env` 또는 운영체제 환경 변수로 관리합니다.
+로컬에서는 `.env` 또는 운영체제 환경 변수로 관리합니다. 예시는 `.env.example` 파일을 참고하세요.
 
-Vercel 배포에서는 Project Settings → Environment Variables에서 다음 값을 설정합니다.
-
-```text
-GEMINI_API_KEY=발급받은_Gemini_API_Key
+```env
+GEMINI_API_KEY=your_gemini_api_key_here
 GEMINI_MODEL=gemini-3.5-flash-lite
 ```
+
+Vercel 배포에서는 Project Settings → Environment Variables에서 동일한 값을 추가합니다.
 
 `GEMINI_MODEL`은 선택 사항이며, 무료 API 키를 사용할 때는 `gemini-3.5-flash-lite` → `gemini-3.5-flash` → `gemini-3.8-flash` 순으로 자동으로 대체됩니다.
 
@@ -119,10 +122,17 @@ python desktop_app.py
 
 ## Vercel 배포
 
-1. GitHub 저장소에 프로젝트를 업로드합니다.
-2. Vercel에서 GitHub 저장소를 Import합니다.
-3. Environment Variables에 `GEMINI_API_KEY`를 추가합니다.
+1. Vercel에 로그인합니다.
+2. 이 저장소를 Import합니다.
+3. Project Settings → Environment Variables에서 `GEMINI_API_KEY`와 필요 시 `GEMINI_MODEL`을 추가합니다.
 4. Deploy를 실행합니다.
 5. 배포 URL에서 홈 → AI 여행 추천 → 여행 정보 메뉴 이동과 AI 입력/출력을 확인합니다.
 
 Vercel의 Python Runtime은 프로젝트 루트의 `api/` 디렉터리 아래 Python 함수를 Vercel Function으로 배포할 수 있으며, `requirements.txt`로 의존성을 정의할 수 있습니다.
+
+실제 배포 명령은 다음과 같습니다.
+
+```bash
+npx vercel login
+npx vercel --prod
+```
