@@ -106,16 +106,4 @@ python -m http.server 8000
 
 Vercel의 Python Runtime은 프로젝트 루트의 `api/` 디렉터리 아래 Python 함수를 Vercel Function으로 배포할 수 있으며, `requirements.txt`로 의존성을 정의할 수 있습니다.
 
-## 제출 전 체크리스트
 
-- [ ] Vercel URL 접속 가능
-- [ ] 최소 3개 섹션 메뉴 이동 확인
-- [ ] 데스크톱 화면 확인
-- [ ] 모바일 화면 확인
-- [ ] AI 입력 → 결과 출력 확인
-- [ ] 빈 입력 안내 확인
-- [ ] API 오류 안내 확인
-- [ ] README에 배포 URL 기록
-- [ ] 서비스 기획서 포함
-- [ ] 데스크톱/모바일/AI 동작 스크린샷 준비
-- [ ] AI 코딩 도구 사용 과정 증빙 준비
