@@ -1,8 +1,83 @@
 import json
 import os
 from http.server import BaseHTTPRequestHandler
+from pathlib import Path
 
+from dotenv import load_dotenv
 from google import genai
+
+load_dotenv(Path(__file__).resolve().parents[2] / ".env", override=False)
+
+FREE_TIER_MODELS = [
+    "gemini-3.5-flash-lite",
+    "gemini-3.5-flash",
+    "gemini-3.8-flash",
+]
+
+
+def get_model_candidates() -> list[str]:
+    configured = (os.getenv("GEMINI_MODEL") or "").strip()
+    if configured:
+        candidates = [configured]
+        for model in FREE_TIER_MODELS:
+            if model not in candidates:
+                candidates.append(model)
+        return candidates
+    return list(FREE_TIER_MODELS)
+
+
+def is_quota_or_model_error(exc: Exception) -> bool:
+    text = str(exc).lower()
+    markers = [
+        "quota",
+        "rate limit",
+        "429",
+        "resource exhausted",
+        "too many requests",
+        "model not found",
+        "unsupported model",
+        "not found",
+        "permission denied",
+        "forbidden",
+    ]
+    return any(marker in text for marker in markers)
+
+
+def select_next_model(current_model: str, exc: Exception) -> str | None:
+    if not is_quota_or_model_error(exc):
+        return None
+
+    candidates = get_model_candidates()
+    if current_model not in candidates:
+        return None
+
+    index = candidates.index(current_model)
+    if index + 1 >= len(candidates):
+        return None
+    return candidates[index + 1]
+
+
+def extract_response_text(response) -> str:
+    if response is None:
+        raise ValueError("AI 응답이 비어 있습니다.")
+
+    text = getattr(response, "text", None)
+    if text:
+        return text
+
+    candidates = getattr(response, "candidates", None)
+    if candidates:
+        for candidate in candidates:
+            if getattr(candidate, "content", None):
+                parts = getattr(candidate.content, "parts", None) or []
+                for part in parts:
+                    if getattr(part, "text", None):
+                        return part.text
+
+    if isinstance(response, str):
+        return response
+
+    raise ValueError("AI 응답 텍스트를 추출하지 못했습니다.")
 
 
 def send_json(handler: BaseHTTPRequestHandler, status: int, payload: dict) -> None:
@@ -11,6 +86,9 @@ def send_json(handler: BaseHTTPRequestHandler, status: int, payload: dict) -> No
     handler.send_header("Content-Type", "application/json; charset=utf-8")
     handler.send_header("Cache-Control", "no-store")
     handler.send_header("Content-Length", str(len(body)))
+    handler.send_header("Access-Control-Allow-Origin", "*")
+    handler.send_header("Access-Control-Allow-Headers", "Content-Type")
+    handler.send_header("Access-Control-Allow-Methods", "POST, OPTIONS")
     handler.end_headers()
     handler.wfile.write(body)
 
@@ -54,44 +132,33 @@ def parse_json_response(text: str) -> dict:
     return data
 
 
-class handler(BaseHTTPRequestHandler):
-    def do_OPTIONS(self):
-        self.send_response(204)
-        self.send_header("Access-Control-Allow-Origin", "*")
-        self.send_header("Access-Control-Allow-Headers", "Content-Type")
-        self.send_header("Access-Control-Allow-Methods", "POST, OPTIONS")
-        self.end_headers()
+def process_recommend_request(payload: dict) -> dict:
+    if not isinstance(payload, dict):
+        raise ValueError("요청 데이터 형식이 올바르지 않습니다.")
 
-    def do_POST(self):
-        if self.path.rstrip("/") != "/api/recommend":
-            send_json(self, 404, {"error": "요청 경로를 찾을 수 없습니다."})
-            return
+    date_text = str(payload.get("date", "")).strip()
+    style = str(payload.get("style", "")).strip()
 
-        try:
-            length = int(self.headers.get("Content-Length", "0"))
-            if length <= 0 or length > 20_000:
-                send_json(self, 400, {"error": "요청 데이터가 올바르지 않습니다."})
-                return
+    if not date_text or not style:
+        raise ValueError("여행 날짜와 여행 스타일을 모두 입력해 주세요.")
+    if len(style) > 300:
+        raise ValueError("여행 스타일은 300자 이내로 입력해 주세요.")
 
-            raw = self.rfile.read(length).decode("utf-8")
-            payload = json.loads(raw)
-            date_text = str(payload.get("date", "")).strip()
-            style = str(payload.get("style", "")).strip()
+    api_key = os.getenv("GEMINI_API_KEY")
+    if not api_key:
+        raise RuntimeError("서버에 GEMINI_API_KEY가 설정되지 않았습니다.")
 
-            if not date_text or not style:
-                send_json(self, 400, {"error": "여행 날짜와 여행 스타일을 모두 입력해 주세요."})
-                return
-            if len(style) > 300:
-                send_json(self, 400, {"error": "여행 스타일은 300자 이내로 입력해 주세요."})
-                return
+    config_model = (os.getenv("GEMINI_MODEL") or "").strip()
+    if config_model:
+        model_candidates = [config_model]
+        for model in FREE_TIER_MODELS:
+            if model not in model_candidates:
+                model_candidates.append(model)
+    else:
+        model_candidates = list(FREE_TIER_MODELS)
 
-            api_key = os.getenv("GEMINI_API_KEY")
-            if not api_key:
-                send_json(self, 500, {"error": "서버에 GEMINI_API_KEY가 설정되지 않았습니다."})
-                return
-
-            client = genai.Client(api_key=api_key)
-            prompt = f"""
+    client = genai.Client(api_key=api_key)
+    prompt = f"""
 당신은 국내 여행 플래너입니다.
 사용자의 여행 날짜와 여행 스타일을 바탕으로 국내 여행지를 2~3곳 추천하세요.
 초보 여행자가 이해하기 쉬운 짧고 실용적인 설명을 사용하세요.
@@ -114,16 +181,59 @@ class handler(BaseHTTPRequestHandler):
 }}
 """
 
-            interaction = client.interactions.create(
-                model="gemini-3.8-flash",
-                input=prompt,
+    last_error = None
+    for model_name in model_candidates:
+        try:
+            response = client.models.generate_content(
+                model=model_name,
+                contents=prompt,
             )
-            text = interaction.output_text
-            data = parse_json_response(text)
-            send_json(self, 200, data)
+            text = extract_response_text(response)
+            return parse_json_response(text)
+        except Exception as exc:  # pragma: no cover - fallback handling
+            last_error = exc
+            next_model = select_next_model(model_name, exc)
+            if next_model is None:
+                break
+            continue
 
+    if last_error is not None:
+        raise last_error
+    raise RuntimeError("Gemini 모델 응답을 생성하지 못했습니다.")
+
+
+class handler(BaseHTTPRequestHandler):
+    def do_OPTIONS(self):
+        self.send_response(204)
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type")
+        self.send_header("Access-Control-Allow-Methods", "POST, OPTIONS")
+        self.end_headers()
+
+    def do_POST(self):
+        if self.path.rstrip("/") != "/api/recommend":
+            send_json(self, 404, {"error": "요청 경로를 찾을 수 없습니다."})
+            return
+
+        try:
+            length = int(self.headers.get("Content-Length", "0"))
+            if length <= 0 or length > 20_000:
+                send_json(self, 400, {"error": "요청 데이터가 올바르지 않습니다."})
+                return
+
+            raw = self.rfile.read(length).decode("utf-8")
+            payload = json.loads(raw)
+            try:
+                data = process_recommend_request(payload)
+                send_json(self, 200, data)
+            except ValueError as exc:
+                send_json(self, 400, {"error": str(exc)})
+            except RuntimeError as exc:
+                send_json(self, 500, {"error": str(exc)})
+            except Exception:
+                send_json(self, 502, {"error": "AI API 호출 중 문제가 발생했습니다. 잠시 후 다시 시도해 주세요."})
         except json.JSONDecodeError:
-            send_json(self, 502, {"error": "AI 응답을 JSON으로 해석하지 못했습니다. 잠시 후 다시 시도해 주세요."})
+            send_json(self, 502, {"error": "요청 JSON을 해석하지 못했습니다. 잠시 후 다시 시도해 주세요."})
         except ValueError as exc:
             send_json(self, 502, {"error": str(exc)})
         except Exception:

@@ -79,7 +79,10 @@ Vercel 배포에서는 Project Settings → Environment Variables에서 다음 �
 
 ```text
 GEMINI_API_KEY=발급받은_Gemini_API_Key
+GEMINI_MODEL=gemini-3.5-flash-lite
 ```
+
+`GEMINI_MODEL`은 선택 사항이며, 무료 API 키를 사용할 때는 `gemini-3.5-flash-lite` → `gemini-3.5-flash` → `gemini-3.8-flash` 순으로 자동으로 대체됩니다.
 
 API Key는 GitHub 저장소, README, 스크린샷에 공개하지 않습니다.
 
@@ -93,13 +96,23 @@ python -m pip install -r requirements.txt
 
 환경 변수 설정 후 정적 파일은 로컬 웹서버로 확인할 수 있습니다.
 
+### 웹 브라우저로 실행
+
 ```bash
-python -m http.server 8000
+python server.py
 ```
 
 브라우저에서 `http://localhost:8000` 접속.
 
-> `/api/recommend`는 Vercel Functions 환경에서 실행되므로 AI API 기능 최종 확인은 Vercel 배포 환경에서 진행합니다.
+### PyQt5 데스크톱 앱으로 실행
+
+```bash
+python desktop_app.py
+```
+
+이 앱은 프로젝트의 로컬 서버를 자동으로 실행하고, 내장 브라우저에서 전체 웹 화면을 보여줍니다.
+
+> 로컬에서는 정적 파일과 `/api/recommend` API를 함께 처리하는 서버를 실행합니다. 실제 AI 호출은 `GEMINI_API_KEY` 환경 변수가 있어야 동작합니다.
 
 ## Vercel 배포
 
