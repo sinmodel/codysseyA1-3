@@ -22,6 +22,11 @@
 
 ![AI국내여행](다음주말_스크린샷.png)
 
+### 4 국내여행 [날짜별 3개 지역] 실행 결과 :
+
+![AI국내여행](국내여행.png)
+
+
 ## 기술 스택
 
 - Frontend: HTML5, CSS3, Vanilla JavaScript
