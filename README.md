@@ -3,11 +3,11 @@
 **과제 제출자 : 신 재 풍**
 
 ## 서비스 소개
-
+```
 여행 날짜와 여행 스타일을 입력하면 Gemini API가 국내 여행지를 2~3곳 추천해 주는 바닐라 HTML/CSS/JavaScript 웹서비스입니다.
 
 브라우저의 JavaScript가 `/api/recommend`로 요청을 보내고, Vercel Python Serverless Function이 Gemini API를 호출한 뒤 JSON 결과를 반환합니다. 결과는 JavaScript가 여행지 카드와 하루 여행 예시로 화면에 표시합니다.
-
+```
 ## 제출물
 
 ### 1 AI국내여행 메뉴화면 :
