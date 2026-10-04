@@ -29,13 +29,13 @@ JSON 결과를 반환합니다.
 
 
 ## 기술 스택
-
+```
 - Frontend: HTML5, CSS3, Vanilla JavaScript
 - Backend: Vercel Functions (Python)
 - AI: Google Gemini API
 - Deployment: Vercel
 - Version control: Git / GitHub
-
+```
 ## 배포 URL
 
 ```text
