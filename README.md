@@ -105,15 +105,14 @@ Project Settings → Environment Variables에서 동일한 값을 추가합니�
 ```
 
 ## 로컬 실행
-
+```
 Python 3.12 이상 권장.
 
-```bash
+bash
 python -m pip install -r requirements.txt
-```
 
 환경 변수 설정 후 정적 파일은 로컬 웹서버로 확인할 수 있습니다.
-
+```
 ### 웹 브라우저로 실행
 
 ```bash
