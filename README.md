@@ -83,21 +83,26 @@ JavaScript가 화면에 출력
 ```
 ## 환경 변수
 ```
-API Key는 코드에 직접 작성하지 않습니다.
+비공개 원칙에 따라, API Key는 코드에 직접 작성하지 않습니다.
 로컬에서는 `.env` 또는 운영체제 환경 변수로 관리합니다.
 예시는 `.env.example` 파일을 참고하세요.
 ```
 
 ```env
-GEMINI_API_KEY=your_gemini_api_key_here
+GEMINI_API_KEY=your_Gemini_Api_Key_here
 GEMINI_MODEL=gemini-3.5-flash-lite
 ```
 
-Vercel 배포에서는 Project Settings → Environment Variables에서 동일한 값을 추가합니다.
+```
+Vercel 배포에서는
+Project Settings → Environment Variables에서 동일한 값을 추가합니다.
 
-`GEMINI_MODEL`은 선택 사항이며, 무료 API 키를 사용할 때는 `gemini-3.5-flash-lite` → `gemini-3.5-flash` → `gemini-3.8-flash` 순으로 자동으로 대체됩니다.
+`GEMINI_MODEL`은 선택 사항이며, 
+무료 API 키를 사용할 때는 연결 제한 대책 방안 등으로
+`gemini-3.5-flash-lite` → `gemini-3.5-flash` → `gemini-3.8-flash` 순으로 자동으로 대체됩니다.
 
-API Key는 GitHub 저장소, README, 스크린샷에 공개하지 않습니다.
+비공개 원칙에 따라, API Key는 GitHub 저장소, README, 스크린샷에 공개하지 않습니다.
+```
 
 ## 로컬 실행
 
