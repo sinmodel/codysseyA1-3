@@ -113,37 +113,42 @@ python -m pip install -r requirements.txt
 
 환경 변수 설정 후 정적 파일은 로컬 웹서버로 확인할 수 있습니다.
 ```
-### 웹 브라우저로 실행
 
-```bash
-python server.py
+### 웹 브라우저로 실행
 ```
+bash
+python server.py
 
 브라우저에서 `http://localhost:8000` 접속.
+```
 
 ### PyQt5 데스크톱 앱으로 실행
 
-```bash
-python desktop_app.py
 ```
+bash
+python desktop_app.py
 
 이 앱은 프로젝트의 로컬 서버를 자동으로 실행하고, 내장 브라우저에서 전체 웹 화면을 보여줍니다.
 
-> 로컬에서는 정적 파일과 `/api/recommend` API를 함께 처리하는 서버를 실행합니다. 실제 AI 호출은 `GEMINI_API_KEY` 환경 변수가 있어야 동작합니다.
+> 로컬에서는 정적 파일과 `/api/recommend` API를 함께 처리하는 서버를 실행합니다.
+실제 AI 호출은 `GEMINI_API_KEY` 환경 변수가 있어야 동작합니다.
+```
 
 ## Vercel 배포
-
+```
 1. Vercel에 로그인합니다.
 2. 이 저장소를 Import합니다.
 3. Project Settings → Environment Variables에서 `GEMINI_API_KEY`와 필요 시 `GEMINI_MODEL`을 추가합니다.
 4. Deploy를 실행합니다.
 5. 배포 URL에서 홈 → AI 여행 추천 → 여행 정보 메뉴 이동과 AI 입력/출력을 확인합니다.
 
-Vercel의 Python Runtime은 프로젝트 루트의 `api/` 디렉터리 아래 Python 함수를 Vercel Function으로 배포할 수 있으며, `requirements.txt`로 의존성을 정의할 수 있습니다.
+Vercel의 Python Runtime은
+프로젝트 루트의 `api/` 디렉터리 아래 Python 함수를 Vercel Function으로 배포할 수 있으며,
+`requirements.txt`로 의존성을 정의할 수 있습니다.
 
 실제 배포 명령은 다음과 같습니다.
 
-```bash
+bash
 npx vercel login
 npx vercel --prod
 ```
