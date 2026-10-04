@@ -5,8 +5,8 @@
 ## 서비스 소개
 ```
 여행 날짜와 여행 스타일을 입력하면 Gemini API가 국내 여행지를 2~3곳 추천해 주는 바닐라 HTML/CSS/JavaScript 웹서비스입니다.
-브라우저의 JavaScript가 `/api/recommend`로 요청을 보내고, Vercel Python Serverless Function이 Gemini API를 호출한 뒤
-JSON 결과를 반환합니다.
+브라우저의 JavaScript가 `/api/recommend`로 요청을 보내고,
+Vercel Python Serverless Function이 Gemini API를 호출한 뒤 JSON 결과를 반환합니다.
 결과는 JavaScript가 여행지 카드와 하루 여행 예시로 화면에 표시합니다.
 ```
 ## 제출물
@@ -82,10 +82,11 @@ JavaScript가 화면에 출력
 - Gemini JSON 형식 오류: 서버에서 응답 구조를 검증하고 오류를 반환합니다.
 ```
 ## 환경 변수
-
+```
 API Key는 코드에 직접 작성하지 않습니다.
-
-로컬에서는 `.env` 또는 운영체제 환경 변수로 관리합니다. 예시는 `.env.example` 파일을 참고하세요.
+로컬에서는 `.env` 또는 운영체제 환경 변수로 관리합니다.
+예시는 `.env.example` 파일을 참고하세요.
+```
 
 ```env
 GEMINI_API_KEY=your_gemini_api_key_here
